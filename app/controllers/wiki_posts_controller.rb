@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 require 'net/http'
+
 class WikiPostsController < ApplicationController
+    TOKEN = ENV['WIKI_API_KEY']
     def index
-        uri = URI.parse('http://localhost:3000/api/v1/wiki_posts')
-        response = Net::HTTP.get_response(uri)
+        uri = URI.parse('http://localhost:3000/api/v1/wiki_posts?page=1&limit=4')
+
+        http = Net::HTTP.new(uri.host, uri.port)
+        request = Net::HTTP::Get.new(uri.request_uri)
+        request['Authorization'] = "Bearer #{TOKEN}"
+
+        response = http.request(request)
 
         if response.is_a?(Net::HTTPSuccess)
             @wiki_posts = JSON.parse(response.body)
