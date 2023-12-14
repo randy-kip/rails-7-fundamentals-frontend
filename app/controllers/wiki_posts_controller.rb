@@ -10,10 +10,8 @@ class WikiPostsController < ApplicationController
 
     def show
         id = params[:id]
-        uri = URI.parse("http://localhost:3000/api/v1/wiki_posts/#{id}")
-        response = Net::HTTP.get_response(uri)
-
-        attributes = JSON.parse(response.body)
+        
+        attributes = WikiPostService.fetch_post(id)
         @wiki_post = WikiPost.new(attributes)
     end
 end
