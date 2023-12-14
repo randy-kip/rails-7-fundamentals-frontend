@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'net/http'
-
 class WikiPostsController < ApplicationController
     def index
         uri = URI.parse('http://localhost:3000/api/v1/wiki_posts')
@@ -14,6 +13,7 @@ class WikiPostsController < ApplicationController
         uri = URI.parse("http://localhost:3000/api/v1/wiki_posts/#{id}")
         response = Net::HTTP.get_response(uri)
 
-        @wiki_post = JSON.parse(response.body)
+        attributes = JSON.parse(response.body)
+        @wiki_post = WikiPost.new(attributes)
     end
 end
